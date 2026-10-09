@@ -4,6 +4,18 @@
   "y": 0,
   "uniqueID": "id-648",
   "name": "Intro_Seat",
+  "ioValues": [
+    {
+      "name": "height",
+      "ioValue": 22,
+      "currentEquation": "22"
+    },
+    {
+      "name": "width",
+      "ioValue": 12,
+      "currentEquation": "12"
+    }
+  ],
   "topLevel": true,
   "allAtoms": [
     {
@@ -17,9 +29,840 @@
           "ioValue": "__GEOMETRY_INPUT__"
         }
       ]
+    },
+    {
+      "atomType": "Input",
+      "x": 0,
+      "y": 0.4,
+      "uniqueID": "id-700",
+      "name": "height",
+      "options": []
+    },
+    {
+      "atomType": "Input",
+      "x": 0,
+      "y": 0.8,
+      "uniqueID": "id-703",
+      "name": "width",
+      "options": []
+    },
+    {
+      "atomType": "Circle",
+      "x": 0.1,
+      "y": 0.8,
+      "uniqueID": "id-706",
+      "ioValues": [
+        {
+          "name": "diameter",
+          "ioValue": 12
+        }
+      ]
+    },
+    {
+      "atomType": "Extrude",
+      "x": 0.3,
+      "y": 0.8,
+      "uniqueID": "id-709",
+      "ioValues": [
+        {
+          "name": "geometry",
+          "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "height",
+          "ioValue": 0.75
+        }
+      ]
+    },
+    {
+      "atomType": "Constant",
+      "x": 0.2,
+      "y": 0.4,
+      "uniqueID": "id-713",
+      "name": "plywood",
+      "value": 0.75
+    },
+    {
+      "atomType": "Move",
+      "x": 0.4,
+      "y": 0.8,
+      "uniqueID": "id-715",
+      "ioValues": [
+        {
+          "name": "geometry",
+          "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "xDist",
+          "ioValue": 0
+        },
+        {
+          "name": "yDist",
+          "ioValue": 0
+        },
+        {
+          "name": "zDist",
+          "ioValue": 22,
+          "currentEquation": "height"
+        }
+      ]
+    },
+    {
+      "atomType": "Molecule",
+      "x": 0.3,
+      "y": 0.4,
+      "uniqueID": "id-721",
+      "name": "leg",
+      "topLevel": false,
+      "allAtoms": [
+        {
+          "atomType": "Output",
+          "x": 1,
+          "y": 0.5,
+          "uniqueID": "id-723",
+          "ioValues": [
+            {
+              "name": "number or geometry",
+              "ioValue": "__GEOMETRY_INPUT__"
+            }
+          ]
+        },
+        {
+          "atomType": "GitHubMolecule",
+          "x": 0.2,
+          "y": 0.6,
+          "uniqueID": "id-735",
+          "name": "Trapezoid",
+          "ioValues": [
+            {
+              "name": "Base1",
+              "ioValue": 12,
+              "currentEquation": "width"
+            },
+            {
+              "name": "Base2",
+              "ioValue": 8.399999999999999,
+              "currentEquation": "width * 0.7"
+            },
+            {
+              "name": "Height(Y)",
+              "ioValue": 22,
+              "currentEquation": "height"
+            }
+          ],
+          "topLevel": false,
+          "allAtoms": [
+            {
+              "atomType": "Output",
+              "x": 1,
+              "y": 0.5,
+              "uniqueID": "id-730",
+              "ioValues": [
+                {
+                  "name": "number or geometry",
+                  "ioValue": "__GEOMETRY_INPUT__"
+                }
+              ]
+            },
+            {
+              "atomType": "Code",
+              "x": 0.5,
+              "y": 0.4,
+              "uniqueID": "id-731",
+              "ioValues": [
+                {
+                  "name": "Base1",
+                  "ioValue": 12
+                },
+                {
+                  "name": "Base2",
+                  "ioValue": 8.399999999999999
+                },
+                {
+                  "name": "Height",
+                  "ioValue": 22
+                },
+                {
+                  "name": "color",
+                  "ioValue": "#5B9BD5",
+                  "currentEquation": "#5B9BD5"
+                }
+              ],
+              "interpreterVersion": 1,
+              "code": "/**\n * 2D isosceles trapezoid.\n * Base1 = bottom edge length, Base2 = top edge length,\n * Height = perpendicular distance between the two bases.\n * Centered on the origin in the XY plane.\n *\n * @param Base1  bottom base length (mm)\n * @param Base2  top base length (mm)\n * @param Height height between bases (mm)\n */\nfunction run(\n  Base1: number = 40,\n  Base2: number = 20,\n  Height: number = 25,\n  color: string = \"#5B9BD5\",\n): Assembly {\n  const halfH = Height / 2;\n\n  // Four corners, symmetric about the Y axis (isosceles)\n  const shape = replicad\n    .draw([-Base1 / 2, -halfH]) // bottom-left\n    .lineTo([Base1 / 2, -halfH]) // bottom-right\n    .lineTo([Base2 / 2, halfH]) // top-right\n    .lineTo([-Base2 / 2, halfH]) // top-left\n    .close();\n\n  return new Assembly({\n    geometry: shape,\n    color: color,\n    tags: [\"trapezoid\", \"2D\"],\n    bom: [`Isosceles trapezoid ${Base1}/${Base2}×${Height} mm`],\n  });\n}",
+              "compiledCode": "\"use strict\";\n/**\n * 2D isosceles trapezoid.\n * Base1 = bottom edge length, Base2 = top edge length,\n * Height = perpendicular distance between the two bases.\n * Centered on the origin in the XY plane.\n *\n * @param Base1  bottom base length (mm)\n * @param Base2  top base length (mm)\n * @param Height height between bases (mm)\n */\nfunction run(Base1 = 40, Base2 = 20, Height = 25, color = \"#5B9BD5\") {\n    const halfH = Height / 2;\n    // Four corners, symmetric about the Y axis (isosceles)\n    const shape = replicad\n        .draw([-Base1 / 2, -halfH]) // bottom-left\n        .lineTo([Base1 / 2, -halfH]) // bottom-right\n        .lineTo([Base2 / 2, halfH]) // top-right\n        .lineTo([-Base2 / 2, halfH]) // top-left\n        .close();\n    return new Assembly({\n        geometry: shape,\n        color: color,\n        tags: [\"trapezoid\", \"2D\"],\n        bom: [`Isosceles trapezoid ${Base1}/${Base2}×${Height} mm`],\n    });\n}\n"
+            },
+            {
+              "atomType": "Input",
+              "x": 0,
+              "y": 0.2,
+              "uniqueID": "id-732",
+              "name": "Base1",
+              "options": []
+            },
+            {
+              "atomType": "Input",
+              "x": 0,
+              "y": 0.2,
+              "uniqueID": "id-733",
+              "name": "Base2",
+              "options": []
+            },
+            {
+              "atomType": "Input",
+              "x": 0,
+              "y": 0.3,
+              "uniqueID": "id-734",
+              "name": "Height(Y)",
+              "options": []
+            }
+          ],
+          "allConnectors": [
+            {
+              "ap2Name": "number or geometry",
+              "ap1ID": "id-731",
+              "ap2ID": "id-730"
+            },
+            {
+              "ap2Name": "Base1",
+              "ap1ID": "id-732",
+              "ap2ID": "id-731"
+            },
+            {
+              "ap2Name": "Base2",
+              "ap1ID": "id-733",
+              "ap2ID": "id-731"
+            },
+            {
+              "ap2Name": "Height",
+              "ap1ID": "id-734",
+              "ap2ID": "id-731"
+            }
+          ],
+          "parentRepo": {
+            "lastFoundGit": "2026-10-09T18:23:38.944Z",
+            "privateRepo": false,
+            "repoName": "Trapezoid",
+            "dateCreated": "2026-06-16T00:33:52Z",
+            "likes": 0,
+            "pngURL": "https://raw.githubusercontent.com/BarbourSmith/Trapezoid/master/project.png?sanitize=true",
+            "readme": "https://raw.githubusercontent.com/BarbourSmith/Trapezoid/master/README.md?sanitize=true",
+            "yyyy": 2026,
+            "topMoleculeID": "",
+            "userRanking": 0,
+            "userSetAsThumbnail": false,
+            "githubMoleculesUsed": [],
+            "html_url": "https://github.com/BarbourSmith/Trapezoid",
+            "topics": [],
+            "pullRequests": [],
+            "forks": 0,
+            "dateModified": "2026-06-16T00:42:25Z",
+            "ranking": 1,
+            "searchField": "trapezoid barboursmith creates a 2d isosceles trapezoid defined by base1 base2 and height ",
+            "owner": "BarbourSmith",
+            "description": "Creates a 2D Isosceles Trapezoid defined by base1 base2 and height",
+            "contentURL": "https://raw.githubusercontent.com/BarbourSmith/Trapezoid/master/project.abundance?sanitize=true",
+            "svgURL": "https://raw.githubusercontent.com/BarbourSmith/Trapezoid/master/project.svg?sanitize=true",
+            "isLocal": false
+          },
+          "unitsKey": "Unitless",
+          "fileTypeVersion": 1,
+          "lastReloadedFromGithubAt": 1791573723289
+        },
+        {
+          "atomType": "Move",
+          "x": 0.3,
+          "y": 0.4,
+          "uniqueID": "id-751",
+          "ioValues": [
+            {
+              "name": "geometry",
+              "ioValue": "__GEOMETRY_INPUT__"
+            },
+            {
+              "name": "xDist",
+              "ioValue": 0
+            },
+            {
+              "name": "yDist",
+              "ioValue": 11,
+              "currentEquation": "height / 2"
+            },
+            {
+              "name": "zDist",
+              "ioValue": 0
+            }
+          ]
+        },
+        {
+          "atomType": "GitHubMolecule",
+          "x": 0.2,
+          "y": 0.8,
+          "uniqueID": "id-757",
+          "name": "Trapezoid",
+          "ioValues": [
+            {
+              "name": "Base1",
+              "ioValue": 8.399999999999999,
+              "currentEquation": "width * 0.7"
+            },
+            {
+              "name": "Base2",
+              "ioValue": 1.5,
+              "currentEquation": "plywood * 2"
+            },
+            {
+              "name": "Height(Y)",
+              "ioValue": 18,
+              "currentEquation": "height - 4"
+            }
+          ],
+          "topLevel": false,
+          "allAtoms": [
+            {
+              "atomType": "Output",
+              "x": 1,
+              "y": 0.5,
+              "uniqueID": "id-758",
+              "ioValues": [
+                {
+                  "name": "number or geometry",
+                  "ioValue": "__GEOMETRY_INPUT__"
+                }
+              ]
+            },
+            {
+              "atomType": "Code",
+              "x": 0.5,
+              "y": 0.4,
+              "uniqueID": "id-759",
+              "ioValues": [
+                {
+                  "name": "Base1",
+                  "ioValue": 8.399999999999999
+                },
+                {
+                  "name": "Base2",
+                  "ioValue": 1.5
+                },
+                {
+                  "name": "Height",
+                  "ioValue": 18
+                },
+                {
+                  "name": "color",
+                  "ioValue": "#5B9BD5",
+                  "currentEquation": "#5B9BD5"
+                }
+              ],
+              "interpreterVersion": 1,
+              "code": "/**\n * 2D isosceles trapezoid.\n * Base1 = bottom edge length, Base2 = top edge length,\n * Height = perpendicular distance between the two bases.\n * Centered on the origin in the XY plane.\n *\n * @param Base1  bottom base length (mm)\n * @param Base2  top base length (mm)\n * @param Height height between bases (mm)\n */\nfunction run(\n  Base1: number = 40,\n  Base2: number = 20,\n  Height: number = 25,\n  color: string = \"#5B9BD5\",\n): Assembly {\n  const halfH = Height / 2;\n\n  // Four corners, symmetric about the Y axis (isosceles)\n  const shape = replicad\n    .draw([-Base1 / 2, -halfH]) // bottom-left\n    .lineTo([Base1 / 2, -halfH]) // bottom-right\n    .lineTo([Base2 / 2, halfH]) // top-right\n    .lineTo([-Base2 / 2, halfH]) // top-left\n    .close();\n\n  return new Assembly({\n    geometry: shape,\n    color: color,\n    tags: [\"trapezoid\", \"2D\"],\n    bom: [`Isosceles trapezoid ${Base1}/${Base2}×${Height} mm`],\n  });\n}",
+              "compiledCode": "\"use strict\";\n/**\n * 2D isosceles trapezoid.\n * Base1 = bottom edge length, Base2 = top edge length,\n * Height = perpendicular distance between the two bases.\n * Centered on the origin in the XY plane.\n *\n * @param Base1  bottom base length (mm)\n * @param Base2  top base length (mm)\n * @param Height height between bases (mm)\n */\nfunction run(Base1 = 40, Base2 = 20, Height = 25, color = \"#5B9BD5\") {\n    const halfH = Height / 2;\n    // Four corners, symmetric about the Y axis (isosceles)\n    const shape = replicad\n        .draw([-Base1 / 2, -halfH]) // bottom-left\n        .lineTo([Base1 / 2, -halfH]) // bottom-right\n        .lineTo([Base2 / 2, halfH]) // top-right\n        .lineTo([-Base2 / 2, halfH]) // top-left\n        .close();\n    return new Assembly({\n        geometry: shape,\n        color: color,\n        tags: [\"trapezoid\", \"2D\"],\n        bom: [`Isosceles trapezoid ${Base1}/${Base2}×${Height} mm`],\n    });\n}\n"
+            },
+            {
+              "atomType": "Input",
+              "x": 0,
+              "y": 0.2,
+              "uniqueID": "id-760",
+              "name": "Base1",
+              "options": []
+            },
+            {
+              "atomType": "Input",
+              "x": 0,
+              "y": 0.2,
+              "uniqueID": "id-761",
+              "name": "Base2",
+              "options": []
+            },
+            {
+              "atomType": "Input",
+              "x": 0,
+              "y": 0.3,
+              "uniqueID": "id-762",
+              "name": "Height(Y)",
+              "options": []
+            }
+          ],
+          "allConnectors": [
+            {
+              "ap2Name": "number or geometry",
+              "ap1ID": "id-759",
+              "ap2ID": "id-758"
+            },
+            {
+              "ap2Name": "Base1",
+              "ap1ID": "id-760",
+              "ap2ID": "id-759"
+            },
+            {
+              "ap2Name": "Base2",
+              "ap1ID": "id-761",
+              "ap2ID": "id-759"
+            },
+            {
+              "ap2Name": "Height",
+              "ap1ID": "id-762",
+              "ap2ID": "id-759"
+            }
+          ],
+          "parentRepo": {
+            "lastFoundGit": "2026-10-09T18:23:38.944Z",
+            "privateRepo": false,
+            "repoName": "Trapezoid",
+            "dateCreated": "2026-06-16T00:33:52Z",
+            "likes": 0,
+            "pngURL": "https://raw.githubusercontent.com/BarbourSmith/Trapezoid/master/project.png?sanitize=true",
+            "readme": "https://raw.githubusercontent.com/BarbourSmith/Trapezoid/master/README.md?sanitize=true",
+            "yyyy": 2026,
+            "topMoleculeID": "",
+            "userRanking": 0,
+            "userSetAsThumbnail": false,
+            "githubMoleculesUsed": [],
+            "html_url": "https://github.com/BarbourSmith/Trapezoid",
+            "topics": [],
+            "pullRequests": [],
+            "forks": 0,
+            "dateModified": "2026-06-16T00:42:25Z",
+            "ranking": 1,
+            "searchField": "trapezoid barboursmith creates a 2d isosceles trapezoid defined by base1 base2 and height ",
+            "owner": "BarbourSmith",
+            "description": "Creates a 2D Isosceles Trapezoid defined by base1 base2 and height",
+            "contentURL": "https://raw.githubusercontent.com/BarbourSmith/Trapezoid/master/project.abundance?sanitize=true",
+            "svgURL": "https://raw.githubusercontent.com/BarbourSmith/Trapezoid/master/project.svg?sanitize=true",
+            "isLocal": false
+          },
+          "unitsKey": "Unitless",
+          "fileTypeVersion": 1,
+          "lastReloadedFromGithubAt": 1791573723289
+        },
+        {
+          "atomType": "Move",
+          "x": 0.4,
+          "y": 0.6,
+          "uniqueID": "id-778",
+          "ioValues": [
+            {
+              "name": "geometry",
+              "ioValue": "__GEOMETRY_INPUT__"
+            },
+            {
+              "name": "xDist",
+              "ioValue": 0
+            },
+            {
+              "name": "yDist",
+              "ioValue": 9,
+              "currentEquation": "(height - 4) / 2"
+            },
+            {
+              "name": "zDist",
+              "ioValue": 0
+            }
+          ]
+        },
+        {
+          "atomType": "Difference",
+          "x": 0.4,
+          "y": 0.6,
+          "uniqueID": "id-784",
+          "ioValues": [
+            {
+              "name": "retain",
+              "ioValue": "__GEOMETRY_INPUT__"
+            },
+            {
+              "name": "remove",
+              "ioValue": "__GEOMETRY_INPUT__"
+            }
+          ]
+        },
+        {
+          "atomType": "Extrude",
+          "x": 0.5,
+          "y": 0.7,
+          "uniqueID": "id-788",
+          "ioValues": [
+            {
+              "name": "geometry",
+              "ioValue": "__GEOMETRY_INPUT__"
+            },
+            {
+              "name": "height",
+              "ioValue": 0.75,
+              "currentEquation": "plywood"
+            }
+          ]
+        },
+        {
+          "atomType": "GitHubMolecule",
+          "x": 0.6,
+          "y": 0.4,
+          "uniqueID": "id-803",
+          "name": "Filet_Vertical_Edges",
+          "ioValues": [
+            {
+              "name": "Shape",
+              "ioValue": "__GEOMETRY_INPUT__"
+            },
+            {
+              "name": "Radius",
+              "ioValue": 0.5,
+              "currentEquation": "0.5"
+            },
+            {
+              "name": "Bounding_Box",
+              "ioValue": "__GEOMETRY_INPUT__"
+            }
+          ],
+          "topLevel": false,
+          "allAtoms": [
+            {
+              "atomType": "Output",
+              "x": 1,
+              "y": 0.5,
+              "uniqueID": "id-793",
+              "ioValues": [
+                {
+                  "name": "number or geometry",
+                  "ioValue": "__GEOMETRY_INPUT__"
+                }
+              ]
+            },
+            {
+              "atomType": "Input",
+              "x": 0,
+              "y": 0.2,
+              "uniqueID": "id-794",
+              "name": "Shape",
+              "type": "geometry",
+              "options": []
+            },
+            {
+              "atomType": "Input",
+              "x": 0,
+              "y": 0.2,
+              "uniqueID": "id-795",
+              "name": "Radius",
+              "options": []
+            },
+            {
+              "atomType": "Rectangle",
+              "x": 0.3,
+              "y": 0.2,
+              "uniqueID": "id-796",
+              "ioValues": [
+                {
+                  "name": "x length",
+                  "ioValue": 100
+                },
+                {
+                  "name": "y length",
+                  "ioValue": 100
+                }
+              ]
+            },
+            {
+              "atomType": "Extrude",
+              "x": 0.4,
+              "y": 0.3,
+              "uniqueID": "id-797",
+              "ioValues": [
+                {
+                  "name": "geometry",
+                  "ioValue": "__GEOMETRY_INPUT__"
+                },
+                {
+                  "name": "height",
+                  "ioValue": 100
+                }
+              ]
+            },
+            {
+              "atomType": "Rectangle",
+              "x": 0.2,
+              "y": 0.8,
+              "uniqueID": "id-798",
+              "ioValues": [
+                {
+                  "name": "x length",
+                  "ioValue": 100
+                },
+                {
+                  "name": "y length",
+                  "ioValue": 300
+                }
+              ]
+            },
+            {
+              "atomType": "Extrude",
+              "x": 0.3,
+              "y": 0.8,
+              "uniqueID": "id-799",
+              "ioValues": [
+                {
+                  "name": "geometry",
+                  "ioValue": "__GEOMETRY_INPUT__"
+                },
+                {
+                  "name": "height",
+                  "ioValue": 150
+                }
+              ]
+            },
+            {
+              "atomType": "Move",
+              "x": 0.4,
+              "y": 0.6,
+              "uniqueID": "id-800",
+              "ioValues": [
+                {
+                  "name": "geometry",
+                  "ioValue": "__GEOMETRY_INPUT__"
+                },
+                {
+                  "name": "xDist",
+                  "ioValue": 21
+                },
+                {
+                  "name": "yDist",
+                  "ioValue": 20
+                },
+                {
+                  "name": "zDist",
+                  "ioValue": 0
+                }
+              ]
+            },
+            {
+              "atomType": "Input",
+              "x": 0,
+              "y": 0.3,
+              "uniqueID": "id-801",
+              "name": "Bounding_Box",
+              "type": "geometry",
+              "options": []
+            },
+            {
+              "atomType": "Code",
+              "x": 0.7,
+              "y": 0.4,
+              "uniqueID": "id-802",
+              "ioValues": [
+                {
+                  "name": "shape",
+                  "ioValue": "__GEOMETRY_INPUT__"
+                },
+                {
+                  "name": "radius",
+                  "ioValue": 0.5
+                },
+                {
+                  "name": "region",
+                  "ioValue": "__GEOMETRY_INPUT__"
+                }
+              ],
+              "interpreterVersion": 1,
+              "code": "/**\n * Fillets vertical (Z-direction) edges on geometry with optional region-based filtering.\n * If a region is provided, only fillets edges within that bounding box.\n */\nfunction run(\n  shape: Assembly,\n  radius: number = 2,\n  region?: Assembly\n) {\n  // ── Step 1: Determine edge filter based on region ──────────────────\n  let edgeFilter: (e: any) => any;\n  let inputShape = shape\n\n  if (region) {\n    try {\n      // Extract geometry from region (could be Assembly or direct 3D shape)\n      let regionGeo = region.geometry;\n\n      // If it's an array, get the first element\n      if (Array.isArray(regionGeo)) {\n        regionGeo = regionGeo[0];\n      }\n      console.log(regionGeo.boundingBox)\n      // Get bounding box from the 3D shape\n      const bounds = regionGeo.boundingBox.bounds\n      if (bounds) {\n        console.log(\"bounding in new\")\n        console.log(bounds)\n        edgeFilter = (e) => e.inDirection(\"Z\").inBox(bounds[0], bounds[1]);\n        console.log(edgeFilter)\n      } else {\n        edgeFilter = (e) => e.inDirection(\"Z\");\n      }\n    } catch (err) {\n      // Fallback if bounds extraction fails\n      edgeFilter = (e) => e.inDirection(\"Z\");\n    }\n  } else {\n    // No region: fillet only vertical (Z-direction) edges\n    edgeFilter = (e) => e.inDirection(\"Z\");\n  }\n\n  // ── Step 2: Apply fillet to selected edges ──────────────────────────────\n  // If no edge selector is provided, fillet all edges.\n  // Pass a selector like (e) => e.inPlane(\"XY\", z) to fillet only specific edges.\n  let filletedGeometry = inputShape.geometry;\n  if (edgeFilter) {\n    filletedGeometry = inputShape.geometry.fillet(radius, edgeFilter);\n  } else {\n    filletedGeometry = inputShape.geometry.fillet(radius);\n  }\n\n  // ── Step 3: Wrap in an Assembly preserving upstream properties ──────────\n  // Color, tags, and BOM info are inherited from the input shape.\n  const result: Assembly = new Assembly({\n    geometry: filletedGeometry,\n    color: inputShape.color,\n    tags: inputShape.tags,\n    plane: inputShape.plane,\n    bom: inputShape.bom,\n  });\n  return result;\n}",
+              "compiledCode": "\"use strict\";\n/**\n * Fillets vertical (Z-direction) edges on geometry with optional region-based filtering.\n * If a region is provided, only fillets edges within that bounding box.\n */\nfunction run(shape, radius = 2, region) {\n    // ── Step 1: Determine edge filter based on region ──────────────────\n    let edgeFilter;\n    let inputShape = shape;\n    if (region) {\n        try {\n            // Extract geometry from region (could be Assembly or direct 3D shape)\n            let regionGeo = region.geometry;\n            // If it's an array, get the first element\n            if (Array.isArray(regionGeo)) {\n                regionGeo = regionGeo[0];\n            }\n            console.log(regionGeo.boundingBox);\n            // Get bounding box from the 3D shape\n            const bounds = regionGeo.boundingBox.bounds;\n            if (bounds) {\n                console.log(\"bounding in new\");\n                console.log(bounds);\n                edgeFilter = (e) => e.inDirection(\"Z\").inBox(bounds[0], bounds[1]);\n                console.log(edgeFilter);\n            }\n            else {\n                edgeFilter = (e) => e.inDirection(\"Z\");\n            }\n        }\n        catch (err) {\n            // Fallback if bounds extraction fails\n            edgeFilter = (e) => e.inDirection(\"Z\");\n        }\n    }\n    else {\n        // No region: fillet only vertical (Z-direction) edges\n        edgeFilter = (e) => e.inDirection(\"Z\");\n    }\n    // ── Step 2: Apply fillet to selected edges ──────────────────────────────\n    // If no edge selector is provided, fillet all edges.\n    // Pass a selector like (e) => e.inPlane(\"XY\", z) to fillet only specific edges.\n    let filletedGeometry = inputShape.geometry;\n    if (edgeFilter) {\n        filletedGeometry = inputShape.geometry.fillet(radius, edgeFilter);\n    }\n    else {\n        filletedGeometry = inputShape.geometry.fillet(radius);\n    }\n    // ── Step 3: Wrap in an Assembly preserving upstream properties ──────────\n    // Color, tags, and BOM info are inherited from the input shape.\n    const result = new Assembly({\n        geometry: filletedGeometry,\n        color: inputShape.color,\n        tags: inputShape.tags,\n        plane: inputShape.plane,\n        bom: inputShape.bom,\n    });\n    return result;\n}\n"
+            }
+          ],
+          "allConnectors": [
+            {
+              "ap2Name": "shape",
+              "ap1ID": "id-794",
+              "ap2ID": "id-802"
+            },
+            {
+              "ap2Name": "radius",
+              "ap1ID": "id-795",
+              "ap2ID": "id-802"
+            },
+            {
+              "ap2Name": "geometry",
+              "ap1ID": "id-796",
+              "ap2ID": "id-797"
+            },
+            {
+              "ap2Name": "geometry",
+              "ap1ID": "id-798",
+              "ap2ID": "id-799"
+            },
+            {
+              "ap2Name": "geometry",
+              "ap1ID": "id-799",
+              "ap2ID": "id-800"
+            },
+            {
+              "ap2Name": "region",
+              "ap1ID": "id-801",
+              "ap2ID": "id-802"
+            },
+            {
+              "ap2Name": "number or geometry",
+              "ap1ID": "id-802",
+              "ap2ID": "id-793"
+            }
+          ],
+          "parentRepo": {
+            "lastFoundGit": "2026-10-09T18:23:38.944Z",
+            "privateRepo": false,
+            "repoName": "Filet_Vertical_Edges",
+            "dateCreated": "2026-03-26T16:35:10Z",
+            "likes": 0,
+            "pngURL": "https://raw.githubusercontent.com/alzatin/Filet_Vertical_Edges/master/project.png?sanitize=true",
+            "readme": "https://raw.githubusercontent.com/alzatin/Filet_Vertical_Edges/master/README.md?sanitize=true",
+            "yyyy": 2026,
+            "topMoleculeID": "",
+            "userRanking": 0,
+            "userSetAsThumbnail": false,
+            "githubMoleculesUsed": [],
+            "html_url": "https://github.com/alzatin/Filet_Vertical_Edges",
+            "topics": [],
+            "pullRequests": [],
+            "parentRepo": "BarbourSmith/Filet_Vertical_Edges",
+            "forks": 0,
+            "dateModified": "2026-06-03T19:32:29Z",
+            "ranking": 2,
+            "searchField": "filet_vertical_edges alzatin fillets only the vertical edges of the input shape ",
+            "owner": "alzatin",
+            "description": "Fillets only the vertical edges of the input shape",
+            "contentURL": "https://raw.githubusercontent.com/alzatin/Filet_Vertical_Edges/master/project.abundance?sanitize=true",
+            "svgURL": "https://raw.githubusercontent.com/alzatin/Filet_Vertical_Edges/master/project.svg?sanitize=true",
+            "isLocal": false
+          },
+          "unitsKey": "MM",
+          "fileTypeVersion": 1,
+          "lastReloadedFromGithubAt": 1791573841725
+        },
+        {
+          "atomType": "Rotate",
+          "x": 0.7,
+          "y": 0.6,
+          "uniqueID": "id-835",
+          "ioValues": [
+            {
+              "name": "geometry",
+              "ioValue": "__GEOMETRY_INPUT__"
+            },
+            {
+              "name": "x-axis degrees",
+              "ioValue": 90,
+              "currentEquation": "90"
+            },
+            {
+              "name": "y-axis degrees",
+              "ioValue": 0
+            },
+            {
+              "name": "z-axis degrees",
+              "ioValue": 0
+            }
+          ]
+        },
+        {
+          "atomType": "Move",
+          "x": 0.8,
+          "y": 0.8,
+          "uniqueID": "id-841",
+          "ioValues": [
+            {
+              "name": "geometry",
+              "ioValue": "__GEOMETRY_INPUT__"
+            },
+            {
+              "name": "xDist",
+              "ioValue": 0
+            },
+            {
+              "name": "yDist",
+              "ioValue": 0.375,
+              "currentEquation": "plywood / 2"
+            },
+            {
+              "name": "zDist",
+              "ioValue": 0
+            }
+          ]
+        }
+      ],
+      "allConnectors": [
+        {
+          "ap2Name": "geometry",
+          "ap1ID": "id-735",
+          "ap2ID": "id-751"
+        },
+        {
+          "ap2Name": "retain",
+          "ap1ID": "id-751",
+          "ap2ID": "id-784"
+        },
+        {
+          "ap2Name": "geometry",
+          "ap1ID": "id-757",
+          "ap2ID": "id-778"
+        },
+        {
+          "ap2Name": "remove",
+          "ap1ID": "id-778",
+          "ap2ID": "id-784"
+        },
+        {
+          "ap2Name": "geometry",
+          "ap1ID": "id-784",
+          "ap2ID": "id-788"
+        },
+        {
+          "ap2Name": "Shape",
+          "ap1ID": "id-788",
+          "ap2ID": "id-803"
+        },
+        {
+          "ap2Name": "geometry",
+          "ap1ID": "id-803",
+          "ap2ID": "id-835"
+        },
+        {
+          "ap2Name": "geometry",
+          "ap1ID": "id-835",
+          "ap2ID": "id-841"
+        },
+        {
+          "ap2Name": "number or geometry",
+          "ap1ID": "id-841",
+          "ap2ID": "id-723"
+        }
+      ],
+      "fileTypeVersion": 1
     }
   ],
-  "allConnectors": [],
+  "allConnectors": [
+    {
+      "ap2Name": "diameter",
+      "ap1ID": "id-703",
+      "ap2ID": "id-706"
+    },
+    {
+      "ap2Name": "geometry",
+      "ap1ID": "id-706",
+      "ap2ID": "id-709"
+    },
+    {
+      "ap2Name": "geometry",
+      "ap1ID": "id-709",
+      "ap2ID": "id-715"
+    },
+    {
+      "ap2Name": "height",
+      "ap1ID": "id-713",
+      "ap2ID": "id-709"
+    },
+    {
+      "ap2Name": "number or geometry",
+      "ap1ID": "id-715",
+      "ap2ID": "id-649"
+    }
+  ],
   "unitsKey": "Inches",
   "fileTypeVersion": 1,
   "filetypeVersion": 1
